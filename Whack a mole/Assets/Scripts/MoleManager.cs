@@ -28,11 +28,11 @@ public class MoleManager : MonoBehaviour
                 status = !status ? true : false;
 
             }
-            if (this.gameObject.GetComponent<MeshRenderer>().material.name == "Rojo (Instance)" && status == false)
+            if (this.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().material.name == "Rojo (Instance)" && status == false)
                 ResetGameObject();
-            this.gameObject.GetComponent<MeshRenderer>().enabled = status;
+            //this.gameObject.GetComponent<MeshRenderer>().enabled = status;
             this.GetComponent<BoxCollider>().enabled = status;
-            //this.gameObject.SetActive(status);
+            this.gameObject.transform.GetChild(0).gameObject.SetActive(status);
             //Debug.Log("Objeto: " + this.name + " en status: " + status+ " el color es: "+ this.gameObject.GetComponent<MeshRenderer>().material.name);
         }
 
@@ -50,6 +50,6 @@ public class MoleManager : MonoBehaviour
     {
 
        this.GetComponent<BoxCollider>().enabled = true;
-       this.GetComponent<MeshRenderer>().material = defaultMat;
+        this.gameObject.transform.GetChild(0).transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().material = defaultMat;
     }
 }

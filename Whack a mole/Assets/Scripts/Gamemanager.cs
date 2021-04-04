@@ -50,7 +50,7 @@ public class Gamemanager : MonoBehaviour
                         RaycastHit hitInfo;
                         if (Physics.Raycast(ray, out hitInfo))
                         {
-                            hitInfo.collider.GetComponent<MeshRenderer>().material = hitMaterial;
+                            hitInfo.collider.transform.GetChild(0).transform.GetChild(0).GetComponent<SkinnedMeshRenderer>().material = hitMaterial;
                             hitInfo.collider.GetComponent<BoxCollider>().enabled = false;
                             count++;
                         }
