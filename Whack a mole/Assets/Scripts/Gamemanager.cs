@@ -6,22 +6,60 @@ using Vuforia;
 using UnityEngine.UI;
 public class Gamemanager : MonoBehaviour
 {
-    //public ImageTargetBehaviour[] misImagenes;
-    public int count = 0;
-    public Text txtContador;
+    public Material hitMaterial;
+    float timeLeft = 60.0f;
+    public int count = 0, objInScene = 0;
+    public Text txtCounter, txtTime;
+    public GameObject Texto1, Texto2;
+    bool gameOver, endCorrutine;
 
     // Start is called before the first frame update
     void Start()
     {
-        //TrackableBehaviour mbTrack = misImagenes[0].GetComponent<TrackableBehaviour>();
-        
+        gameOver = false;
+        endCorrutine = false ;
     }
 
     // Update is called once per frame
     void Update()
     {
 
-        txtContador.text = count.ToString();
+        if(objInScene == 3) //si estan los 3 targets en escena
+        {
+            if(!endCorrutine)
+            {
+                StartCoroutine(StartGame());
+            }
+            else
+            {
+                timeLeft -= Time.deltaTime;
+                txtTime.text = timeLeft.ToString();
+                if (timeLeft < 0)
+                    gameOver = true;
+
+                if (gameOver)
+                {
+
+                }
+                else
+                {
+                    if (Input.GetMouseButtonDown(0))
+                    {
+                        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                        RaycastHit hitInfo;
+                        if (Physics.Raycast(ray, out hitInfo))
+                        {
+                            hitInfo.collider.GetComponent<MeshRenderer>().material = hitMaterial;
+                            count++;
+                        }
+                    }
+
+                }
+
+                txtCounter.text = count.ToString();
+            }
+
+        }
 
     }
 
@@ -37,11 +75,19 @@ public class Gamemanager : MonoBehaviour
 
     public void OnTargetFoundCounter()
     {
-        count++;
+        objInScene++;
+    }
+    
+
+    IEnumerator StartGame()
+    {
+        Texto1.SetActive(true);
+        yield return new WaitForSeconds(2);
+        Texto1.SetActive(false);
+        Texto2.SetActive(true);
+        yield return new WaitForSeconds(2);
+        Texto2.SetActive(false);
+        endCorrutine = true;
     }
 
-    public void OnTargetLostCounter()
-    {
-        count--;
-    }
 }
